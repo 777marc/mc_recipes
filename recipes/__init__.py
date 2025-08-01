@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, app
 
 
 def create_app(test_config=None):
@@ -37,5 +37,9 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
+
+    from . import recipe
+    app.register_blueprint(recipe.bp)
+    app.add_url_rule('/', endpoint='index')
 
     return app
