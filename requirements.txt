@@ -1,1 +1,2 @@
-flask
+flaskflask==2.0.1
+# sqlite3
