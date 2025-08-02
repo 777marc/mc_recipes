@@ -1,24 +1,29 @@
+# Use an official Python base image
 FROM python:3.9-slim
 
+# Set the working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    sqlite3 \
-    && rm -rf /var/lib/apt/lists/*
+# Copy your requirements (dependencies) list
+COPY requirements.txt requirements.txt
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy the rest of your application code
 COPY . .
 
-# Create SQLite database directory
-RUN mkdir -p /app/instance
+# Set environment variables (optional for Flask)
+ENV FLASK_APP=recipes
+ENV FLASK_RUN_HOST=0.0.0.0
 
-# Expose port
-EXPOSE 3000
+# Expose port 5000 for Flask
+EXPOSE 5000
 
-# Run the application
-CMD ["python", "index.py"]
+# Run the Flask app
+# CMD ["flask", "run"]
+
+ENV command1="flask --app recipes init-db"
+ENV command2="flask --app recipes run"
+
+CMD ["sh", "-c", "command1 && command2"]
